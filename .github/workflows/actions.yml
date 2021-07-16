@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v1
       - name: List All Files After Checkout Action
         run: |
-          ls
+          ls -a
           pwd      
       - name: Simple JavaScript Action
         id: greet
