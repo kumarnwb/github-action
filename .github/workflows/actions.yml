@@ -7,10 +7,24 @@ jobs:
   run-github-actions:
     runs-on: ubuntu-latest
     steps:
+      - name: List All Files when this action runs on Github
+        run: |
+          ls
+          pwd
+      - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run 
+        uses: actions/checkout@v1
+      - name: List All Files After Checkout Action
+        run: |
+          ls
+          pwd      
       - name: Simple JavaScript Action
         id: greet
+        # "uses" is used when we want to refer an action weather published or lies with the same repository , uses requires an @ parameter which could be
+        # a commit , version or a branch. Commit is safest , followed by Version and if possible braches should be avoided
         uses: actions/hello-world-javascript-action@v1
+        # with command is used to take an argument for the github action as an input parameter
         with:
           who-to-greet: Rohit
       - name: Log Output of Who to Greet steps
+      # steps is used to get the output of an step , an Id needs to be associated with that step for extract the output once execution is complete
         run: echo  "${{steps.greet.outputs.time}}"
