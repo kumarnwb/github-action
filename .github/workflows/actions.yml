@@ -1,9 +1,11 @@
 name: Actions Workflows
 
 on:
-  schedule:
-  # minute hour day_of_month month day_of_week , * -> means any value  
-    - cron: "* * * * *"
+  # schedule:
+  # minute hour day_of_month month day_of_week , * -> means any value  , minimum value for github is every 5 min
+  #  - cron: "* * * * *"
+  repository_dispatch:
+    types: [build]
   push: { branches: [main] }
   pull_request:
     types:
@@ -11,7 +13,6 @@ on:
       - opened
       - reopened
       - assigned
-
 
 jobs:
   run-github-actions:
@@ -24,14 +25,16 @@ jobs:
           echo $GITHUB_SHA
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
-          echo  "{{github}}"
-      - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run 
-      # Copying the files on to the macine where the actions would run so as to stuffs like build container, run tests and others
+          echo  "${{github}}"
+      - name: Github Respository Payload 
+        run: echo "${{github.event.client_payload}}"   
+      - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run
+        # Copying the files on to the macine where the actions would run so as to stuffs like build container, run tests and others
         uses: actions/checkout@v1
       - name: List All Files After Checkout Action
         run: |
           ls -a
-          pwd      
+          pwd
       - name: Simple JavaScript Action
         id: greet
         # "uses" is used when we want to refer an action weather published or lies with the same repository , uses requires an @ parameter which could be
@@ -41,5 +44,5 @@ jobs:
         with:
           who-to-greet: Rohit
       - name: Log Output of Who to Greet steps
-      # steps is used to get the output of an step , an Id needs to be associated with that step for extract the output once execution is complete
+        # steps is used to get the output of an step , an Id needs to be associated with that step for extract the output once execution is complete
         run: echo  "${{steps.greet.outputs.time}}"
