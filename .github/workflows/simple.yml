@@ -1,1 +1,3 @@
 name: Simple Github Workflow
+
+on: [push]
