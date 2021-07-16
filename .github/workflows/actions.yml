@@ -1,48 +1,62 @@
 name: Actions Workflows
 
 on:
-  # schedule:
-  # minute hour day_of_month month day_of_week , * -> means any value  , minimum value for github is every 5 min
-  #  - cron: "* * * * *"
-  repository_dispatch:
-    types: [build]
-  push: { branches: [main] }
-  pull_request:
-    types:
-      - closed
-      - opened
-      - reopened
-      - assigned
+    # schedule:
+    # minute hour day_of_month month day_of_week , * -> means any value  , minimum value for github is every 5 min
+    #  - cron: "* * * * *"
+    repository_dispatch:
+        types: [build]
+    push:
+        branches:
+            - master
+            - "feature/*"
+            - "feature/**"
+            # The bottom one would be ignore beacuse of !
+            - "!feature/fc" # this would be ignored even if it matched the above pattern
+        # branches-ignore: Either the Branches or Branches-ignore can be used not both can be used in same file
+        tags:
+            - v1.*
+        paths:
+            - "**.js" # Let say we want to run actions on certain paths or in this case only when there are changes in Javascript files , then this can used , this would match all
+            # for .js file in the entire repository
+    #   paths-ignore: Again either Path or Path-ignore can be used
+
+    pull_request:
+        types:
+            - closed
+            - opened
+            - reopened
+            - assigned
 
 jobs:
-  run-github-actions:
-    runs-on: ubuntu-latest
-    steps:
-      - name: List All Files when this action runs on Github
-        run: |
-          ls
-          pwd
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          echo  "${{github}}"
-      - name: Github Respository Payload 
-        run: echo "${{github.event.client_payload}}"   
-      - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run
-        # Copying the files on to the macine where the actions would run so as to stuffs like build container, run tests and others
-        uses: actions/checkout@v1
-      - name: List All Files After Checkout Action
-        run: |
-          ls -a
-          pwd
-      - name: Simple JavaScript Action
-        id: greet
-        # "uses" is used when we want to refer an action weather published or lies with the same repository , uses requires an @ parameter which could be
-        # a commit , version or a branch. Commit is safest , followed by Version and if possible braches should be avoided
-        uses: actions/hello-world-javascript-action@v1
-        # with command is used to take an argument for the github action as an input parameter
-        with:
-          who-to-greet: Rohit
-      - name: Log Output of Who to Greet steps
-        # steps is used to get the output of an step , an Id needs to be associated with that step for extract the output once execution is complete
-        run: echo  "${{steps.greet.outputs.time}}"
+    run-github-actions:
+        runs-on: ubuntu-latest
+        steps:
+            - name: List All Files when this action runs on Github
+              run: |
+                  ls
+                  pwd
+                  echo $GITHUB_SHA
+                  echo $GITHUB_REPOSITORY
+                  echo $GITHUB_WORKSPACE
+                  echo  "${{github}}"
+            - name: Github Respository Payload
+              run: echo "${{github.event.client_payload}}"
+            - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run
+              # Copying the files on to the macine where the actions would run so as to stuffs like build container, run tests and others
+              uses: actions/checkout@v1
+            - name: List All Files After Checkout Action
+              run: |
+                  ls -a
+                  pwd
+            - name: Simple JavaScript Action
+              id: greet
+              # "uses" is used when we want to refer an action weather published or lies with the same repository , uses requires an @ parameter which could be
+              # a commit , version or a branch. Commit is safest , followed by Version and if possible braches should be avoided
+              uses: actions/hello-world-javascript-action@v1
+              # with command is used to take an argument for the github action as an input parameter
+              with:
+                  who-to-greet: Rohit
+            - name: Log Output of Who to Greet steps
+              # steps is used to get the output of an step , an Id needs to be associated with that step for extract the output once execution is complete
+              run: echo  "${{steps.greet.outputs.time}}"
