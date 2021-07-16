@@ -1,7 +1,17 @@
 name: Actions Workflows
 
 on:
+  schedule:
+  # minute hour day_of_month month day_of_week , * -> means any value  
+    - cron: "* * * * *"
   push: { branches: [main] }
+  pull_request:
+    types:
+      - closed
+      - opened
+      - reopened
+      - assigned
+
 
 jobs:
   run-github-actions:
