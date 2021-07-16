@@ -8,3 +8,7 @@ jobs:
     steps:
       - name: echo a string 
         run:  whoami
+      - name: running a multiline command 
+        run: | 
+          whoami
+          echo "General Zod" 
