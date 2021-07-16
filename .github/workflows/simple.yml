@@ -1,3 +1,10 @@
 name: Simple Github Workflow
 
 on: [push]
+
+jobs:
+  run-a-shell-command:
+    runs-on:  ubuntu-20.04
+    steps:
+      - name: echo a string 
+        run:  echo "Hello"
