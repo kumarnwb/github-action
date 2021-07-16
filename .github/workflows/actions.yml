@@ -11,7 +11,12 @@ jobs:
         run: |
           ls
           pwd
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo  "{{GITHUB}}"
       - name: Git Checkout -> Copy Files of the repository on the Machine where this action would run 
+      # Copying the files on to the macine where the actions would run so as to stuffs like build container, run tests and others
         uses: actions/checkout@v1
       - name: List All Files After Checkout Action
         run: |
