@@ -12,3 +12,11 @@ jobs:
         run: | 
           whoami
           echo "General Zod" 
+  run-windows-commands:
+    runs-on:  windows-latest
+    steps:
+      - name: print current directory
+        run: Get-Location 
+      - name: Running a Bash Command on Windows Machine
+        run: pwd
+        shell: bash         
