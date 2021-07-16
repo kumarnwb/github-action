@@ -4,19 +4,20 @@ on: [push]
 
 jobs:
   run-a-shell-command:
-    runs-on:  ubuntu-20.04
+    runs-on: ubuntu-20.04
     steps:
-      - name: echo a string 
-        run:  whoami
-      - name: running a multiline command 
-        run: | 
+      - name: echo a string
+        run: whoami
+      - name: running a multiline command
+        run: |
           whoami
-          echo "General Zod" 
+          echo "General Zod"
   run-windows-commands:
-    runs-on:  windows-latest
+    runs-on: windows-latest
+    needs: ["run-a-shell-command"]
     steps:
       - name: print current directory
-        run: Get-Location 
+        run: Get-Location
       - name: Running a Bash Command on Windows Machine
         run: pwd
-        shell: bash         
+        shell: bash
