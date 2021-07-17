@@ -14,7 +14,7 @@ jobs:
 
   one:
     runs-on: ubuntu-latest
-    if: github.event_name == "pull"
+    if: github.event_name == "pull_request"
     steps:
       - name: Dump GitHub context
         env:
