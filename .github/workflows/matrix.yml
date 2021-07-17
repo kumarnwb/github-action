@@ -1,0 +1,17 @@
+name: Matrix
+
+on: push
+
+jobs:
+  check-node-version:
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Current NodeJS Version
+        run: node -v
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 6
+      - name: Updated NodeJS Version
+        run: node -v    
+
+            
