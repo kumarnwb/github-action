@@ -4,14 +4,18 @@ on: push
 
 jobs:
   check-node-version:
-    runs-on:  ubuntu-latest
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        node_version: [6, 8, 10] # now the job would run three time with node_version 6, 8, 10
+      fail-fast: true # this will keep on running the job even if one of them will fail
+      max-parallel: 2 # Runs the jobs in Paraller , by default Github Will Maximize the parallel execution but if we want we can do it
+    runs-on: ${{matrix.os}}
     steps:
       - name: Current NodeJS Version
         run: node -v
       - uses: actions/setup-node@v1
         with:
-          node-version: 6
+          node-version: ${{matrix.node_version}}
       - name: Updated NodeJS Version
-        run: node -v    
-
-            
+        run: node -v
